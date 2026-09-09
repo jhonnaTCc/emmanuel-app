@@ -38,9 +38,11 @@ export default async function SongDetailPage({ params }: { params: { id: string 
   return (
     <AppShell fullName={profile?.full_name ?? ''} role={profile?.role ?? ''}>
       <div className="flex flex-col gap-6 max-w-3xl">
-        <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900">{song.title}</h1>
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-2">
+          <div className="min-w-0">
+            <h1 className="text-xl md:text-2xl font-bold text-slate-900 break-words">
+              {song.title}
+            </h1>
             <p className="text-slate-500">{song.artist_or_album}</p>
             <div className="flex flex-wrap gap-2 mt-3 text-xs">
               {song.key_note && (
@@ -66,8 +68,8 @@ export default async function SongDetailPage({ params }: { params: { id: string 
             </div>
           </div>
           {profile?.role === 'director' && (
-            <form action={handleDelete}>
-              <button className="text-sm text-red-500 hover:text-red-700 font-semibold">
+            <form action={handleDelete} className="flex-shrink-0">
+              <button className="text-sm text-red-500 hover:text-red-700 font-semibold whitespace-nowrap">
                 Eliminar canción
               </button>
             </form>
@@ -104,4 +106,3 @@ export default async function SongDetailPage({ params }: { params: { id: string 
     </AppShell>
   );
 }
-
