@@ -73,10 +73,22 @@ export default function SongFilesList({ files }: { files: any[] }) {
             {open && isPdf(f) && (
               <div className="border-t border-slate-100 bg-slate-50">
                 <iframe
-                  src={`${f.file_url}#toolbar=1`}
-                  className="w-full h-[80vh]"
+                  src={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                    f.file_url
+                  )}&embedded=true`}
+                  className="w-full h-[70vh] md:h-[80vh]"
                   title={f.file_name}
                 />
+                <div className="p-2 text-center border-t border-slate-100">
+                  <a
+                    href={f.file_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-xs font-semibold text-blue-600"
+                  >
+                    ¿No se ve bien? Ábrelo en una pestaña nueva →
+                  </a>
+                </div>
               </div>
             )}
 
