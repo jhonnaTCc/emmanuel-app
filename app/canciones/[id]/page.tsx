@@ -83,20 +83,25 @@ export default async function SongDetailPage({ params }: { params: { id: string 
           {profile?.role === 'director' && (
             <form
               action={handleUpload}
-              className="flex items-center gap-3 mt-4 pt-4 border-t border-slate-100"
+              className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mt-4 pt-4 border-t border-slate-100"
             >
               <select
                 name="file_type"
                 defaultValue="partitura"
-                className="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm"
+                className="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm w-full sm:w-auto"
               >
                 <option value="partitura">Partitura</option>
                 <option value="cifrado">Cifrado</option>
                 <option value="audio">Audio</option>
                 <option value="otro">Otro</option>
               </select>
-              <input name="file" type="file" required className="text-sm flex-1" />
-              <button className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold">
+              <input
+                name="file"
+                type="file"
+                required
+                className="text-sm w-full sm:flex-1 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-slate-100 file:text-slate-700 file:text-xs file:font-semibold"
+              />
+              <button className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold w-full sm:w-auto flex-shrink-0">
                 Subir
               </button>
             </form>
