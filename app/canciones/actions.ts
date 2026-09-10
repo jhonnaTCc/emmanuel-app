@@ -15,6 +15,8 @@ export async function createSong(formData: FormData) {
   const bpm = formData.get('bpm') ? Number(formData.get('bpm')) : null;
   const time_signature = formData.get('time_signature') as string;
   const category = formData.get('category') as string;
+  const youtube_url = (formData.get('youtube_url') as string) || null;
+  const color_tag = (formData.get('color_tag') as string) || 'slate';
 
   const { data: song, error } = await supabase
     .from('songs')
@@ -25,6 +27,8 @@ export async function createSong(formData: FormData) {
       bpm,
       time_signature,
       category,
+      youtube_url,
+      color_tag,
       created_by: profile.id,
     })
     .select()
@@ -43,6 +47,46 @@ export async function createSong(formData: FormData) {
   revalidatePath('/canciones');
   revalidatePath('/dashboard');
   return song;
+}
+
+export async function updateSongExtras(formData: FormData) {
+  const profile = await getCurrentProfile();
+  if (profile?.role !== 'director') throw new Error('Solo el director puede editar canciones.');
+
+  const songId = formData.get('song_id') as string;
+  if (!songId) throw new Error('Falta el id de la canción.');
+
+  const supabase = createClient();
+
+  const title = formData.get('title') as string;
+  const artist_or_album = (formData.get('artist_or_album') as string) || null;
+  const key_note = (formData.get('key_note') as string) || null;
+  const bpmRaw = formData.get('bpm') as string;
+  const bpm = bpmRaw ? Number(bpmRaw) : null;
+  const time_signature = (formData.get('time_signature') as string) || null;
+  const category = (formData.get('category') as string) || null;
+  const youtube_url = (formData.get('youtube_url') as string) || null;
+  const color_tag = (formData.get('color_tag') as string) || 'slate';
+
+  const { error } = await supabase
+    .from('songs')
+    .update({
+      title,
+      artist_or_album,
+      key_note,
+      bpm,
+      time_signature,
+      category,
+      youtube_url,
+      color_tag,
+    })
+    .eq('id', songId);
+
+  if (error) throw new Error(error.message);
+
+  revalidatePath(`/canciones/${songId}`);
+  revalidatePath('/canciones');
+  revalidatePath('/dashboard');
 }
 
 export async function uploadFileForSong(
