@@ -2,19 +2,23 @@
 
 import { useRef, useState } from 'react';
 import { createSong } from '@/app/canciones/actions';
+import { SONG_COLORS } from '@/lib/songColors';
 
 export default function NewSongForm() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [color, setColor] = useState('slate');
   const formRef = useRef<HTMLFormElement>(null);
 
   async function handleSubmit(formData: FormData) {
     setLoading(true);
     setError(null);
+    formData.set('color_tag', color);
     try {
       await createSong(formData);
       formRef.current?.reset();
+      setColor('slate');
       setOpen(false);
     } catch (e: any) {
       setError(e.message);
@@ -76,7 +80,7 @@ export default function NewSongForm() {
         />
         <select
           name="category"
-          className="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm md:col-span-3"
+          className="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm"
           defaultValue=""
         >
           <option value="">Categoría (opcional)</option>
@@ -86,6 +90,28 @@ export default function NewSongForm() {
           <option>Ministración</option>
           <option>Salida</option>
         </select>
+        <input
+          name="youtube_url"
+          placeholder="Enlace de YouTube (opcional)"
+          className="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm md:col-span-3"
+        />
+
+        <div className="md:col-span-3 flex flex-col gap-2 border-t border-slate-100 pt-3">
+          <span className="text-xs font-semibold text-slate-500">Color de la tarjeta</span>
+          <div className="flex items-center gap-2 flex-wrap">
+            {Object.entries(SONG_COLORS).map(([key, val]) => (
+              <button
+                type="button"
+                key={key}
+                title={val.label}
+                onClick={() => setColor(key)}
+                className={`w-7 h-7 rounded-full ${val.swatch} border-2 transition-all ${
+                  color === key ? 'border-slate-800 scale-110' : 'border-transparent'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
 
         <div className="md:col-span-3 flex items-center gap-3 border-t border-slate-100 pt-3">
           <select
