@@ -66,23 +66,29 @@ export default function TaskAssignmentCard({ assignment, task }: { assignment: a
       </div>
 
       <form action={handleSubmit} className="flex flex-col gap-2 pt-3 border-t border-slate-100">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-            className="px-2 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-xs"
+            className="px-2 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-xs w-full sm:w-auto"
           >
             <option value="pendiente">Pendiente</option>
             <option value="en_progreso">En progreso</option>
             <option value="completada">Completada</option>
           </select>
-          <input
-            name="submission_file"
-            type="file"
-            className="text-xs flex-1"
-            title="Subir audio/video de práctica (opcional)"
-          />
+          <div className="flex-1 min-w-0">
+            <input
+              name="submission_file"
+              type="file"
+              accept=".pdf,image/*"
+              className="text-xs w-full file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:bg-slate-100 file:text-slate-700 file:text-xs file:font-semibold"
+              title="Adjuntar tu entrega en PDF o imagen (opcional)"
+            />
+          </div>
         </div>
+        <p className="text-[11px] text-slate-400 -mt-1">
+          Puedes adjuntar tu tarea como PDF o foto/imagen.
+        </p>
         <textarea
           name="submission_note"
           defaultValue={assignment.submission_note ?? ''}
