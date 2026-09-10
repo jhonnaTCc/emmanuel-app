@@ -1,7 +1,9 @@
 import { createClient, getCurrentProfile } from '@/lib/supabase/server';
 import AppShell from '@/components/AppShell';
 import SongFilesList from '@/components/SongFilesList';
+import EditSongExtras from '@/components/EditSongExtras';
 import { uploadFileForSongAction, deleteSong } from '../actions';
+import { getYouTubeEmbedId } from '@/lib/youtube';
 import { redirect } from 'next/navigation';
 
 export default async function SongDetailPage({ params }: { params: { id: string } }) {
@@ -22,6 +24,8 @@ export default async function SongDetailPage({ params }: { params: { id: string 
       </AppShell>
     );
   }
+
+  const youtubeId = getYouTubeEmbedId(song.youtube_url);
 
   async function handleUpload(formData: FormData) {
     'use server';
@@ -75,6 +79,28 @@ export default async function SongDetailPage({ params }: { params: { id: string 
             </form>
           )}
         </div>
+
+        {/* Video de YouTube (tutorial / referencia) */}
+        {youtubeId && (
+          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+            <h2 className="font-bold text-slate-900 mb-3">Video / Tutorial</h2>
+            <div className="aspect-video w-full rounded-lg overflow-hidden bg-black">
+              <iframe
+                src={`https://www.youtube.com/embed/${youtubeId}`}
+                title="Video de YouTube"
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        )}
+
+        {profile?.role === 'director' && (
+          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+            <EditSongExtras song={song} />
+          </div>
+        )}
 
         <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
           <h2 className="font-bold text-slate-900 mb-3">Archivos</h2>
