@@ -1,6 +1,7 @@
 import { createClient, getCurrentProfile } from '@/lib/supabase/server';
 import AppShell from '@/components/AppShell';
 import NewSongForm from '@/components/NewSongForm';
+import { songColorClasses } from '@/lib/songColors';
 import Link from 'next/link';
 
 export default async function CancionesPage() {
@@ -30,7 +31,9 @@ export default async function CancionesPage() {
             <Link
               key={song.id}
               href={`/canciones/${song.id}`}
-              className="flex flex-col bg-white border border-slate-200/80 rounded-xl p-4 shadow-sm hover:shadow-md transition-all"
+              className={`flex flex-col border rounded-xl p-4 shadow-sm hover:shadow-md transition-all ${songColorClasses(
+                song.color_tag
+              )}`}
             >
               <h3 className="font-bold text-slate-900 leading-tight">{song.title}</h3>
               <p className="text-xs text-slate-500 mt-0.5">{song.artist_or_album}</p>
