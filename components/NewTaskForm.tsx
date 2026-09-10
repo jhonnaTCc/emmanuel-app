@@ -3,21 +3,27 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createTask } from '@/app/tareas/actions';
+import { SONG_COLORS } from '@/lib/songColors';
+import TaskCategorySelect from './TaskCategorySelect';
 
 export default function NewTaskForm({
   members,
   songs,
+  categories,
 }: {
   members: { id: string; full_name: string; instrument: string | null }[];
   songs: { id: string; title: string }[];
+  categories: { id: string; name: string }[];
 }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [color, setColor] = useState('slate');
 
   async function handleSubmit(formData: FormData) {
     setLoading(true);
     setError(null);
+    formData.set('color_tag', color);
     try {
       await createTask(formData);
       router.push('/tareas');
@@ -44,16 +50,7 @@ export default function NewTaskForm({
         className="px-3 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm"
       />
       <div className="grid grid-cols-2 gap-3">
-        <select
-          name="category"
-          defaultValue=""
-          className="px-3 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm"
-        >
-          <option value="">Categoría</option>
-          <option>Músicos & Ensayo</option>
-          <option>Vocalistas & Armonías</option>
-          <option>Audio & Multimedia</option>
-        </select>
+        <TaskCategorySelect categories={categories} />
         <input
           name="due_date"
           type="datetime-local"
@@ -77,6 +74,25 @@ export default function NewTaskForm({
           Archivo de referencia (audio guía, PDF...)
         </label>
         <input name="reference_file" type="file" className="text-sm" />
+      </div>
+
+      <div>
+        <span className="text-xs font-semibold text-slate-500 mb-1 block">
+          Color de la tarjeta
+        </span>
+        <div className="flex items-center gap-2 flex-wrap">
+          {Object.entries(SONG_COLORS).map(([key, val]) => (
+            <button
+              type="button"
+              key={key}
+              title={val.label}
+              onClick={() => setColor(key)}
+              className={`w-7 h-7 rounded-full ${val.swatch} border-2 transition-all ${
+                color === key ? 'border-slate-800 scale-110' : 'border-transparent'
+              }`}
+            />
+          ))}
+        </div>
       </div>
 
       <div>

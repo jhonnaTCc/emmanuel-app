@@ -14,13 +14,14 @@ export default async function NuevaTareaPage() {
     );
   }
 
-  const [{ data: members }, { data: songs }] = await Promise.all([
+  const [{ data: members }, { data: songs }, { data: categories }] = await Promise.all([
     supabase
       .from('profiles')
       .select('id, full_name, instrument')
       .eq('active', true)
       .order('full_name'),
     supabase.from('songs').select('id, title').order('title'),
+    supabase.from('task_categories').select('id, name').order('name'),
   ]);
 
   return (
@@ -32,9 +33,8 @@ export default async function NuevaTareaPage() {
           </p>
           <h1 className="text-2xl font-bold text-slate-900">Crear Tarea Semanal</h1>
         </div>
-        <NewTaskForm members={members ?? []} songs={songs ?? []} />
+        <NewTaskForm members={members ?? []} songs={songs ?? []} categories={categories ?? []} />
       </div>
     </AppShell>
   );
 }
-

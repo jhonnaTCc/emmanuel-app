@@ -60,9 +60,16 @@ export default function TaskAssignmentCard({ assignment, task }: { assignment: a
             </a>
           )}
         </div>
-        <span className={`px-2 py-1 rounded-full text-xs font-bold ${statusStyles[status]}`}>
-          {statusLabels[status]}
-        </span>
+        <div className="flex flex-col items-end gap-1.5 flex-shrink-0">
+          <span className={`px-2 py-1 rounded-full text-xs font-bold ${statusStyles[status]}`}>
+            {statusLabels[status]}
+          </span>
+          {assignment.grade !== null && assignment.grade !== undefined && (
+            <span className="px-2 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-100">
+              Nota: {assignment.grade}/20
+            </span>
+          )}
+        </div>
       </div>
 
       <form action={handleSubmit} className="flex flex-col gap-2 pt-3 border-t border-slate-100">

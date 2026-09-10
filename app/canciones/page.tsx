@@ -1,17 +1,36 @@
 import { createClient, getCurrentProfile } from '@/lib/supabase/server';
 import AppShell from '@/components/AppShell';
 import NewSongForm from '@/components/NewSongForm';
+import SongSearchBar from '@/components/SongSearchBar';
 import { songColorClasses } from '@/lib/songColors';
 import Link from 'next/link';
 
-export default async function CancionesPage() {
+export default async function CancionesPage({
+  searchParams,
+}: {
+  searchParams: { q?: string; category?: string };
+}) {
   const profile = await getCurrentProfile();
   const supabase = createClient();
 
-  const { data: songs } = await supabase
+  let query = supabase
     .from('songs')
     .select('*, song_files(count)')
-    .order('created_at', { ascending: false });
+    .order('title', { ascending: true });
+
+  const category = searchParams?.category?.trim();
+  if (category) {
+    query = query.eq('category', category);
+  }
+
+  const q = searchParams?.q?.trim();
+  if (q) {
+    // Escapamos comas para no romper la sintaxis del filtro .or()
+    const safeQ = q.replace(/[,%]/g, '');
+    query = query.or(`title.ilike.%${safeQ}%,artist_or_album.ilike.%${safeQ}%`);
+  }
+
+  const { data: songs } = await query;
 
   return (
     <AppShell fullName={profile?.full_name ?? ''} role={profile?.role ?? ''}>
@@ -25,6 +44,8 @@ export default async function CancionesPage() {
           </div>
           {profile?.role === 'director' && <NewSongForm />}
         </div>
+
+        <SongSearchBar />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {(songs ?? []).map((song: any) => (
@@ -56,7 +77,9 @@ export default async function CancionesPage() {
           ))}
           {(!songs || songs.length === 0) && (
             <p className="text-slate-400 text-sm col-span-full">
-              Aún no hay canciones en el cancionero.
+              {q || category
+                ? 'No se encontraron canciones con ese criterio de búsqueda.'
+                : 'Aún no hay canciones en el cancionero.'}
             </p>
           )}
         </div>

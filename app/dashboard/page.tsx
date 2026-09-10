@@ -1,5 +1,6 @@
 import { createClient, getCurrentProfile } from '@/lib/supabase/server';
 import AppShell from '@/components/AppShell';
+import { songColorClasses } from '@/lib/songColors';
 import Link from 'next/link';
 
 export default async function DashboardPage() {
@@ -66,7 +67,9 @@ export default async function DashboardPage() {
             {songs.map((item: any) => (
               <div
                 key={item.id}
-                className="flex flex-col bg-white rounded-xl p-3 border border-slate-200/80 shadow-sm"
+                className={`flex flex-col rounded-xl p-3 border shadow-sm ${songColorClasses(
+                  item.songs.color_tag
+                )}`}
               >
                 {item.section_label && (
                   <span className="self-start mb-2 px-2 py-0.5 rounded bg-amber-50 border border-amber-200/70 text-amber-700 text-[10px] font-bold tracking-wider uppercase">

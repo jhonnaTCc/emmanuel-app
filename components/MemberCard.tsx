@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { updateMemberRole, toggleMemberActive } from '@/app/equipo/actions';
+import MemberProfileEditable from './MemberProfileEditable';
 
 export default function MemberCard({
   member,
@@ -28,7 +29,7 @@ export default function MemberCard({
           <p className="font-bold text-slate-900 truncate">
             {member.full_name} {isSelf && <span className="text-xs text-slate-400">(tú)</span>}
           </p>
-          <p className="text-xs text-slate-500">{member.instrument || 'Sin instrumento'}</p>
+          <MemberProfileEditable member={member} isDirector={isDirector} />
         </div>
         <span
           className={`text-[11px] font-bold px-2 py-1 rounded-full capitalize ${

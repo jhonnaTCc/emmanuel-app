@@ -1,6 +1,8 @@
 import { createClient, getCurrentProfile } from '@/lib/supabase/server';
 import AppShell from '@/components/AppShell';
 import TaskAssignmentCard from '@/components/TaskAssignmentCard';
+import TaskCardDirector from '@/components/TaskCardDirector';
+import MemberTaskSummary from '@/components/MemberTaskSummary';
 import Link from 'next/link';
 
 export default async function TareasPage() {
@@ -8,14 +10,24 @@ export default async function TareasPage() {
   const supabase = createClient();
 
   if (profile?.role === 'director') {
-    const { data: tasks } = await supabase
-      .from('tasks')
-      .select('*, task_assignments(*, profiles(full_name, instrument))')
-      .order('created_at', { ascending: false });
+    const [{ data: tasks }, { data: members }, { data: categories }] = await Promise.all([
+      supabase
+        .from('tasks')
+        .select('*, task_assignments(*, profiles(full_name, instrument))')
+        .order('created_at', { ascending: false }),
+      supabase.from('profiles').select('*, task_assignments(status)').order('full_name'),
+      supabase.from('task_categories').select('id, name').order('name'),
+    ]);
+
+    const membersWithStats = (members ?? []).map((m: any) => {
+      const total = m.task_assignments.length;
+      const done = m.task_assignments.filter((a: any) => a.status === 'completada').length;
+      return { ...m, stats: { total, done } };
+    });
 
     return (
       <AppShell fullName={profile.full_name} role={profile.role}>
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-8">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <p className="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">
@@ -32,71 +44,32 @@ export default async function TareasPage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {(tasks ?? []).map((task: any) => {
-              const total = task.task_assignments.length;
-              const done = task.task_assignments.filter(
-                (a: any) => a.status === 'completada'
-              ).length;
-              return (
-                <div
-                  key={task.id}
-                  className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm"
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      {task.category && (
-                        <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
-                          {task.category}
-                        </span>
-                      )}
-                      <h3 className="font-bold text-slate-900 mt-1">{task.title}</h3>
-                      {task.description && (
-                        <p className="text-sm text-slate-500 mt-1">{task.description}</p>
-                      )}
-                    </div>
-                    <span className="text-xs font-bold px-2 py-1 rounded-full bg-slate-100 text-slate-600">
-                      {done}/{total}
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-1.5 mt-3 pt-3 border-t border-slate-100">
-                    {task.task_assignments.map((a: any) => (
-                      <div key={a.id} className="flex items-center justify-between text-sm">
-                        <span className="text-slate-700">
-                          {a.profiles?.full_name}{' '}
-                          <span className="text-slate-400 text-xs">
-                            {a.profiles?.instrument ? `· ${a.profiles.instrument}` : ''}
-                          </span>
-                        </span>
-                        <span
-                          className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-                            a.status === 'completada'
-                              ? 'bg-emerald-50 text-emerald-700'
-                              : a.status === 'en_progreso'
-                              ? 'bg-amber-50 text-amber-700'
-                              : 'bg-slate-100 text-slate-500'
-                          }`}
-                        >
-                          {a.status === 'completada'
-                            ? 'Completada'
-                            : a.status === 'en_progreso'
-                            ? 'En progreso'
-                            : 'Pendiente'}
-                        </span>
-                      </div>
-                    ))}
-                    {total === 0 && (
-                      <p className="text-xs text-slate-400">Sin integrantes asignados.</p>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-            {(!tasks || tasks.length === 0) && (
-              <p className="text-slate-400 text-sm col-span-full">
-                Aún no hay tareas creadas.
-              </p>
-            )}
+          <div>
+            <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wide mb-3">
+              Equipo (toca a alguien para ver todas sus tareas)
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {membersWithStats.map((m: any) => (
+                <MemberTaskSummary key={m.id} member={m} />
+              ))}
+              {membersWithStats.length === 0 && (
+                <p className="text-slate-400 text-sm col-span-full">Aún no hay miembros registrados.</p>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wide mb-3">
+              Tareas creadas
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {(tasks ?? []).map((task: any) => (
+                <TaskCardDirector key={task.id} task={task} categories={categories ?? []} />
+              ))}
+              {(!tasks || tasks.length === 0) && (
+                <p className="text-slate-400 text-sm col-span-full">Aún no hay tareas creadas.</p>
+              )}
+            </div>
           </div>
         </div>
       </AppShell>
