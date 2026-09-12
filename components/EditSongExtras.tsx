@@ -122,6 +122,23 @@ export default function EditSongExtras({ song }: { song: any }) {
             className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-sm"
           />
         </div>
+        <div className="md:col-span-2">
+          <label className="text-xs font-semibold text-slate-500 mb-1 block">
+            Letra con acordes (formato ChordPro)
+          </label>
+          <textarea
+            name="lyrics_chordpro"
+            defaultValue={song.lyrics_chordpro ?? ''}
+            rows={8}
+            placeholder={
+              '{verso: 1}\n[G]Cuán grande es [D]Él, cuán grande [G]es\n\n{coro}\n[C]Cuán grande es [G]Él...'
+            }
+            className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-sm font-mono"
+          />
+          <p className="text-[11px] text-slate-400 mt-1">
+            Escribe el acorde entre corchetes justo antes de la sílaba, y usa {'{verso}'}, {'{coro}'} o {'{puente}'} en su propia línea para marcar las secciones.
+          </p>
+        </div>
       </div>
 
       <div>
