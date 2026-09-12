@@ -17,6 +17,7 @@ export async function createSong(formData: FormData) {
   const category = formData.get('category') as string;
   const youtube_url = (formData.get('youtube_url') as string) || null;
   const color_tag = (formData.get('color_tag') as string) || 'slate';
+  const lyrics_chordpro = (formData.get('lyrics_chordpro') as string) || null;
 
   const { data: song, error } = await supabase
     .from('songs')
@@ -29,6 +30,7 @@ export async function createSong(formData: FormData) {
       category,
       youtube_url,
       color_tag,
+      lyrics_chordpro,
       created_by: profile.id,
     })
     .select()
@@ -67,6 +69,7 @@ export async function updateSongExtras(formData: FormData) {
   const category = (formData.get('category') as string) || null;
   const youtube_url = (formData.get('youtube_url') as string) || null;
   const color_tag = (formData.get('color_tag') as string) || 'slate';
+  const lyrics_chordpro = (formData.get('lyrics_chordpro') as string) || null;
 
   const { error } = await supabase
     .from('songs')
@@ -79,6 +82,7 @@ export async function updateSongExtras(formData: FormData) {
       category,
       youtube_url,
       color_tag,
+      lyrics_chordpro,
     })
     .eq('id', songId);
 
