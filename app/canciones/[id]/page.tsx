@@ -2,6 +2,7 @@ import { createClient, getCurrentProfile } from '@/lib/supabase/server';
 import AppShell from '@/components/AppShell';
 import SongFilesList from '@/components/SongFilesList';
 import EditSongExtras from '@/components/EditSongExtras';
+import LyricsChords from '@/components/LyricsChords';
 import { uploadFileForSongAction, deleteSong } from '../actions';
 import { getYouTubeEmbedId } from '@/lib/youtube';
 import { redirect } from 'next/navigation';
@@ -95,6 +96,12 @@ export default async function SongDetailPage({ params }: { params: { id: string 
             </div>
           </div>
         )}
+
+        {/* Letra con acordes y control de tonalidad */}
+        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+          <h2 className="font-bold text-slate-900 mb-3">Letra y acordes</h2>
+          <LyricsChords lyricsChordpro={song.lyrics_chordpro} originalKey={song.key_note} />
+        </div>
 
         {profile?.role === 'director' && (
           <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
