@@ -121,13 +121,13 @@ export default function Sidebar({
               {theme === 'dark' ? 'Modo oscuro' : 'Modo claro'}
             </span>
             <span
-              className={`w-9 h-5 rounded-full relative transition-colors ${
+              className={`w-9 h-5 rounded-full flex items-center p-0.5 shrink-0 transition-colors ${
                 theme === 'dark' ? 'bg-blue-600' : 'bg-slate-300'
               }`}
             >
               <span
-                className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${
-                  theme === 'dark' ? 'translate-x-4' : 'translate-x-0.5'
+                className={`w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${
+                  theme === 'dark' ? 'translate-x-4' : 'translate-x-0'
                 }`}
               />
             </span>
