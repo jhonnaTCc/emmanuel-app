@@ -49,7 +49,7 @@ export default function TaskCategorySelect({
             setValue(e.target.value);
           }
         }}
-        className="px-3 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm"
+        className="px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
       >
         <option value="">Categoría</option>
         {options.map((c) => (
@@ -67,7 +67,7 @@ export default function TaskCategorySelect({
             value={newCategory}
             onChange={(e) => setNewCategory(e.target.value)}
             placeholder="Nombre de la nueva categoría"
-            className="flex-1 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs"
+            className="flex-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs"
           />
           <button
             type="button"
@@ -83,13 +83,13 @@ export default function TaskCategorySelect({
               setAdding(false);
               setNewCategory('');
             }}
-            className="text-xs text-slate-400 hover:text-slate-600"
+            className="text-xs text-slate-400 dark:text-slate-500 hover:text-slate-600"
           >
             Cancelar
           </button>
         </div>
       )}
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && <p className="text-xs text-red-600 dark:text-red-400">{error}</p>}
 
       {/* Input oculto para que el valor viaje en el FormData cuando estamos agregando */}
       {adding && <input type="hidden" name={name} value={value} />}

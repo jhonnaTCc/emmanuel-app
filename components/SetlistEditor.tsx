@@ -78,67 +78,67 @@ export default function SetlistEditor({
 
   return (
     <form action={handleSubmit} className="flex flex-col gap-6">
-      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm grid grid-cols-1 md:grid-cols-4 gap-3">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-5 shadow-sm grid grid-cols-1 md:grid-cols-4 gap-3">
         <input
           name="service_date"
           type="date"
           required
           defaultValue={initialDate}
-          className="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm"
+          className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
         />
         <input
           name="service_time"
           defaultValue={initialTime}
           placeholder="Hora (ej. 10:00 AM)"
-          className="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm"
+          className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
         />
         <input
           name="location"
           defaultValue={initialLocation}
           placeholder="Lugar"
-          className="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm"
+          className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
         />
         <input
           name="title"
           defaultValue={initialTitle}
           placeholder="Título del repertorio"
-          className="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm"
+          className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
         />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-          <h3 className="font-bold text-slate-900 mb-3">Cancionero — selecciona canciones</h3>
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-5 shadow-sm">
+          <h3 className="font-bold text-slate-900 dark:text-slate-100 mb-3">Cancionero — selecciona canciones</h3>
           <div className="flex flex-col gap-2 max-h-[500px] overflow-y-auto pr-1">
             {songs.map((song) => (
               <label
                 key={song.id}
                 className={`flex items-center gap-3 p-2.5 rounded-lg border cursor-pointer transition-all ${
                   selectedIds.has(song.id)
-                    ? 'border-blue-300 bg-blue-50/60'
-                    : 'border-slate-100 hover:bg-slate-50'
+                    ? 'border-blue-300 dark:border-blue-700 bg-blue-50/60 dark:bg-blue-950/30'
+                    : 'border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={selectedIds.has(song.id)}
                   onChange={() => toggleSong(song.id)}
-                  className="rounded border-slate-300"
+                  className="rounded border-slate-300 dark:border-slate-600"
                 />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-slate-800 truncate">{song.title}</p>
-                  <p className="text-xs text-slate-400 truncate">{song.artist_or_album}</p>
+                  <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 truncate">{song.title}</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-500 truncate">{song.artist_or_album}</p>
                 </div>
                 {song.key_note && (
-                  <span className="text-xs text-amber-700 font-bold">{song.key_note}</span>
+                  <span className="text-xs text-amber-700 dark:text-amber-300 font-bold">{song.key_note}</span>
                 )}
               </label>
             ))}
           </div>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-          <h3 className="font-bold text-slate-900 mb-3">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-5 shadow-sm">
+          <h3 className="font-bold text-slate-900 dark:text-slate-100 mb-3">
             Orden del repertorio ({selected.length})
           </h3>
           <div className="flex flex-col gap-2">
@@ -147,13 +147,13 @@ export default function SetlistEditor({
               return (
                 <div
                   key={item.song_id}
-                  className="flex items-center gap-2 p-2.5 rounded-lg border border-slate-100"
+                  className="flex items-center gap-2 p-2.5 rounded-lg border border-slate-100 dark:border-slate-800"
                 >
-                  <span className="w-6 text-center text-xs font-bold text-slate-400">
+                  <span className="w-6 text-center text-xs font-bold text-slate-400 dark:text-slate-500">
                     {idx + 1}
                   </span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-slate-800 truncate">
+                    <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 truncate">
                       {song?.title}
                     </p>
                   </div>
@@ -161,19 +161,19 @@ export default function SetlistEditor({
                     placeholder="Sección (ej. APERTURA)"
                     value={item.section_label}
                     onChange={(e) => updateLabel(item.song_id, e.target.value)}
-                    className="w-36 px-2 py-1 rounded border border-slate-200 bg-slate-50 text-xs"
+                    className="w-36 px-2 py-1 rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs"
                   />
                   <button
                     type="button"
                     onClick={() => move(idx, -1)}
-                    className="text-slate-400 hover:text-slate-800"
+                    className="text-slate-400 dark:text-slate-500 hover:text-slate-800"
                   >
                     <span className="material-symbols-outlined text-[18px]">arrow_upward</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => move(idx, 1)}
-                    className="text-slate-400 hover:text-slate-800"
+                    className="text-slate-400 dark:text-slate-500 hover:text-slate-800"
                   >
                     <span className="material-symbols-outlined text-[18px]">arrow_downward</span>
                   </button>
@@ -181,7 +181,7 @@ export default function SetlistEditor({
               );
             })}
             {selected.length === 0 && (
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-slate-400 dark:text-slate-500">
                 Selecciona canciones de la izquierda para armar el repertorio.
               </p>
             )}
@@ -189,7 +189,7 @@ export default function SetlistEditor({
         </div>
       </div>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
 
       <button
         type="submit"

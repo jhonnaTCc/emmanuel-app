@@ -33,7 +33,7 @@ export default function MemberProfileEditable({
 
   if (!isDirector) {
     return (
-      <p className="text-sm text-slate-500">
+      <p className="text-sm text-slate-500 dark:text-slate-400">
         {member.instrument || 'Sin instrumento'}
         {member.cargo ? ` · ${member.cargo}` : ''}
       </p>
@@ -43,13 +43,13 @@ export default function MemberProfileEditable({
   if (!editing) {
     return (
       <div className="flex items-center gap-2">
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           {member.instrument || 'Sin instrumento'}
           {member.cargo ? ` · ${member.cargo}` : ' · Sin cargo asignado'}
         </p>
         <button
           onClick={() => setEditing(true)}
-          className="text-xs font-semibold text-blue-600 hover:text-blue-700"
+          className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700"
         >
           Editar
         </button>
@@ -63,13 +63,13 @@ export default function MemberProfileEditable({
         name="instrument"
         defaultValue={member.instrument ?? ''}
         placeholder="Instrumento (ej. Guitarra)"
-        className="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-xs"
+        className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs"
       />
       <input
         name="cargo"
         defaultValue={member.cargo ?? ''}
         placeholder="Cargo (ej. Líder de alabanza)"
-        className="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-xs"
+        className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs"
       />
       <div className="flex items-center gap-2">
         <button
@@ -82,12 +82,12 @@ export default function MemberProfileEditable({
         <button
           type="button"
           onClick={() => setEditing(false)}
-          className="text-xs text-slate-400 hover:text-slate-600"
+          className="text-xs text-slate-400 dark:text-slate-500 hover:text-slate-600"
         >
           Cancelar
         </button>
       </div>
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && <p className="text-xs text-red-600 dark:text-red-400">{error}</p>}
     </form>
   );
 }

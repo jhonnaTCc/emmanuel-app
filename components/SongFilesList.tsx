@@ -33,7 +33,7 @@ export default function SongFilesList({ files }: { files: any[] }) {
   );
 
   if (!files || files.length === 0) {
-    return <p className="text-sm text-slate-400">Sin archivos adjuntos todavía.</p>;
+    return <p className="text-sm text-slate-400 dark:text-slate-500">Sin archivos adjuntos todavía.</p>;
   }
 
   return (
@@ -41,20 +41,20 @@ export default function SongFilesList({ files }: { files: any[] }) {
       {files.map((f) => {
         const open = openId === f.id;
         return (
-          <div key={f.id} className="rounded-lg border border-slate-100 overflow-hidden">
+          <div key={f.id} className="rounded-lg border border-slate-100 dark:border-slate-800 overflow-hidden">
             <button
               onClick={() => setOpenId(open ? null : f.id)}
-              className="w-full flex items-center gap-3 p-3 hover:bg-slate-50 transition-all text-left"
+              className="w-full flex items-center gap-3 p-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all text-left"
             >
-              <span className="material-symbols-outlined text-blue-600">
+              <span className="material-symbols-outlined text-blue-600 dark:text-blue-400">
                 {typeIcons[f.file_type] ?? 'description'}
               </span>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-slate-800 truncate">{f.file_name}</p>
-                <p className="text-xs text-slate-400">{typeLabels[f.file_type]}</p>
+                <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 truncate">{f.file_name}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500">{typeLabels[f.file_type]}</p>
               </div>
               {(isPdf(f) || isAudio(f)) && (
-                <span className="material-symbols-outlined text-slate-400">
+                <span className="material-symbols-outlined text-slate-400 dark:text-slate-500">
                   {open ? 'expand_less' : 'visibility'}
                 </span>
               )}
@@ -64,14 +64,14 @@ export default function SongFilesList({ files }: { files: any[] }) {
                 rel="noreferrer"
                 onClick={(e) => e.stopPropagation()}
                 title="Descargar"
-                className="text-slate-300 hover:text-blue-600"
+                className="text-slate-400 dark:text-slate-500 hover:text-blue-600 dark:hover:text-blue-400"
               >
                 <span className="material-symbols-outlined">download</span>
               </a>
             </button>
 
             {open && isPdf(f) && (
-              <div className="border-t border-slate-100 bg-slate-50">
+              <div className="border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800">
                 <iframe
                   src={`https://docs.google.com/viewer?url=${encodeURIComponent(
                     f.file_url
@@ -79,12 +79,12 @@ export default function SongFilesList({ files }: { files: any[] }) {
                   className="w-full h-[70vh] md:h-[80vh]"
                   title={f.file_name}
                 />
-                <div className="p-2 text-center border-t border-slate-100">
+                <div className="p-2 text-center border-t border-slate-100 dark:border-slate-800">
                   <a
                     href={f.file_url}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-xs font-semibold text-blue-600"
+                    className="text-xs font-semibold text-blue-600 dark:text-blue-400"
                   >
                     ¿No se ve bien? Ábrelo en una pestaña nueva →
                   </a>
@@ -93,7 +93,7 @@ export default function SongFilesList({ files }: { files: any[] }) {
             )}
 
             {open && isAudio(f) && (
-              <div className="border-t border-slate-100 bg-slate-50 p-4">
+              <div className="border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 p-4">
                 <audio controls src={f.file_url} className="w-full">
                   Tu navegador no soporta audio.
                 </audio>

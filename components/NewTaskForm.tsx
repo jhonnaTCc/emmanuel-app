@@ -41,26 +41,26 @@ export default function NewTaskForm({
         name="title"
         required
         placeholder="Título de la tarea"
-        className="px-3 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm"
+        className="px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
       />
       <textarea
         name="description"
         placeholder="Descripción / instrucciones"
         rows={3}
-        className="px-3 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm"
+        className="px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
       />
       <div className="grid grid-cols-2 gap-3">
         <TaskCategorySelect categories={categories} />
         <input
           name="due_date"
           type="datetime-local"
-          className="px-3 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm"
+          className="px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
         />
       </div>
       <select
         name="song_id"
         defaultValue=""
-        className="px-3 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm"
+        className="px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
       >
         <option value="">Relacionar con una canción (opcional)</option>
         {songs.map((s) => (
@@ -70,14 +70,14 @@ export default function NewTaskForm({
         ))}
       </select>
       <div>
-        <label className="text-xs font-semibold text-slate-500 mb-1 block">
+        <label className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">
           Archivo de referencia (audio guía, PDF...)
         </label>
         <input name="reference_file" type="file" className="text-sm" />
       </div>
 
       <div>
-        <span className="text-xs font-semibold text-slate-500 mb-1 block">
+        <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">
           Color de la tarjeta
         </span>
         <div className="flex items-center gap-2 flex-wrap">
@@ -88,7 +88,7 @@ export default function NewTaskForm({
               title={val.label}
               onClick={() => setColor(key)}
               className={`w-7 h-7 rounded-full ${val.swatch} border-2 transition-all ${
-                color === key ? 'border-slate-800 scale-110' : 'border-transparent'
+                color === key ? 'border-slate-800 dark:border-white scale-110' : 'border-transparent'
               }`}
             />
           ))}
@@ -96,8 +96,8 @@ export default function NewTaskForm({
       </div>
 
       <div>
-        <p className="text-xs font-semibold text-slate-500 mb-2">Asignar a:</p>
-        <div className="grid grid-cols-2 gap-2 max-h-52 overflow-y-auto border border-slate-100 rounded-lg p-3">
+        <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">Asignar a:</p>
+        <div className="grid grid-cols-2 gap-2 max-h-52 overflow-y-auto border border-slate-100 dark:border-slate-800 rounded-lg p-3">
           {members.map((m) => (
             <label key={m.id} className="flex items-center gap-2 text-sm">
               <input type="checkbox" name="assigned_user_id" value={m.id} />
@@ -107,7 +107,7 @@ export default function NewTaskForm({
         </div>
       </div>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
 
       <button
         disabled={loading}

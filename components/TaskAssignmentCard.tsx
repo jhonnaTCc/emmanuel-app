@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { updateAssignmentStatus } from '@/app/tareas/actions';
 
 const statusStyles: Record<string, string> = {
-  pendiente: 'bg-slate-100 text-slate-600',
-  en_progreso: 'bg-amber-50 text-amber-700 border border-amber-200',
-  completada: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+  pendiente: 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300',
+  en_progreso: 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/50',
+  completada: 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50',
 };
 
 const statusLabels: Record<string, string> = {
@@ -31,20 +31,20 @@ export default function TaskAssignmentCard({ assignment, task }: { assignment: a
   }
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col gap-3">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-5 shadow-sm flex flex-col gap-3">
       <div className="flex items-start justify-between gap-3">
         <div>
           {task.category && (
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-600">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
               {task.category}
             </span>
           )}
-          <h3 className="font-bold text-slate-900 mt-1">{task.title}</h3>
+          <h3 className="font-bold text-slate-900 dark:text-slate-100 mt-1">{task.title}</h3>
           {task.description && (
-            <p className="text-sm text-slate-500 mt-1">{task.description}</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{task.description}</p>
           )}
           {task.due_date && (
-            <p className="text-xs text-slate-400 mt-2">
+            <p className="text-xs text-slate-400 dark:text-slate-500 mt-2">
               Vence: {new Date(task.due_date).toLocaleString('es-ES')}
             </p>
           )}
@@ -53,7 +53,7 @@ export default function TaskAssignmentCard({ assignment, task }: { assignment: a
               href={task.reference_file_url}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1 text-xs text-blue-600 font-semibold mt-2"
+              className="inline-flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 font-semibold mt-2"
             >
               <span className="material-symbols-outlined text-[14px]">attach_file</span>
               {task.reference_file_name}
@@ -65,19 +65,19 @@ export default function TaskAssignmentCard({ assignment, task }: { assignment: a
             {statusLabels[status]}
           </span>
           {assignment.grade !== null && assignment.grade !== undefined && (
-            <span className="px-2 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-100">
+            <span className="px-2 py-1 rounded-full text-xs font-bold bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-800/50">
               Nota: {assignment.grade}/20
             </span>
           )}
         </div>
       </div>
 
-      <form action={handleSubmit} className="flex flex-col gap-2 pt-3 border-t border-slate-100">
+      <form action={handleSubmit} className="flex flex-col gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
         <div className="flex flex-col sm:flex-row sm:items-center gap-2">
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-            className="px-2 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-xs w-full sm:w-auto"
+            className="px-2 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs w-full sm:w-auto"
           >
             <option value="pendiente">Pendiente</option>
             <option value="en_progreso">En progreso</option>
@@ -88,12 +88,12 @@ export default function TaskAssignmentCard({ assignment, task }: { assignment: a
               name="submission_file"
               type="file"
               accept=".pdf,image/*"
-              className="text-xs w-full file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:bg-slate-100 file:text-slate-700 file:text-xs file:font-semibold"
+              className="text-xs w-full file:mr-2 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:bg-slate-100 dark:file:bg-slate-800 file:text-slate-700 dark:file:text-slate-200 file:text-xs file:font-semibold"
               title="Adjuntar tu entrega en PDF o imagen (opcional)"
             />
           </div>
         </div>
-        <p className="text-[11px] text-slate-400 -mt-1">
+        <p className="text-[11px] text-slate-400 dark:text-slate-500 -mt-1">
           Puedes adjuntar tu tarea como PDF o foto/imagen.
         </p>
         <textarea
@@ -101,7 +101,7 @@ export default function TaskAssignmentCard({ assignment, task }: { assignment: a
           defaultValue={assignment.submission_note ?? ''}
           placeholder="Nota (opcional)"
           rows={2}
-          className="px-2 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-xs"
+          className="px-2 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs"
         />
         <button
           disabled={loading}

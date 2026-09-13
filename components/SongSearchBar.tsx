@@ -31,7 +31,7 @@ export default function SongSearchBar() {
   return (
     <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
       <div className="relative flex-1">
-        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">
+        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-[18px]">
           search
         </span>
         <input
@@ -41,13 +41,13 @@ export default function SongSearchBar() {
             updateParams({ q: e.target.value });
           }}
           placeholder="Buscar por título o artista..."
-          className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 bg-white text-sm"
+          className="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm"
         />
       </div>
       <select
         defaultValue={searchParams.get('category') ?? ''}
         onChange={(e) => updateParams({ category: e.target.value })}
-        className="px-3 py-2 rounded-lg border border-slate-200 bg-white text-sm sm:w-56"
+        className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm sm:w-56"
       >
         <option value="">Todas las categorías</option>
         {CATEGORIES.map((c) => (
@@ -56,7 +56,7 @@ export default function SongSearchBar() {
           </option>
         ))}
       </select>
-      {isPending && <span className="text-xs text-slate-400">Buscando...</span>}
+      {isPending && <span className="text-xs text-slate-400 dark:text-slate-500">Buscando...</span>}
     </div>
   );
 }

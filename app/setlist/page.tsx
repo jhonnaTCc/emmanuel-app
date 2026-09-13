@@ -41,7 +41,7 @@ export default async function SetlistPage({
   if (profile?.role !== 'director') {
     return (
       <AppShell fullName={profile?.full_name ?? ''} role={profile?.role ?? ''}>
-        <p className="text-slate-500">Solo el director puede editar el repertorio.</p>
+        <p className="text-slate-500 dark:text-slate-400">Solo el director puede editar el repertorio.</p>
       </AppShell>
     );
   }
@@ -51,10 +51,10 @@ export default async function SetlistPage({
       <div className="flex flex-col gap-6">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-amber-600 mb-1">
+            <p className="text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 mb-1">
               Planificación
             </p>
-            <h1 className="text-2xl font-bold text-slate-900">Repertorio Dominical</h1>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Repertorio Dominical</h1>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             {(allSetlists ?? []).map((s: any) => (
@@ -64,7 +64,7 @@ export default async function SetlistPage({
                 className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
                   s.service_date === targetDate
                     ? 'bg-blue-600 text-white border-blue-600'
-                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                    : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'
                 }`}
               >
                 {new Date(s.service_date + 'T00:00:00').toLocaleDateString('es-ES', {

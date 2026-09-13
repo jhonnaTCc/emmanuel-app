@@ -40,12 +40,12 @@ export default function NewSongForm() {
   }
 
   return (
-    <div className="w-full bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+    <div className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-5 shadow-sm">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-bold text-slate-900">Nueva canción</h3>
+        <h3 className="font-bold text-slate-900 dark:text-slate-100">Nueva canción</h3>
         <button
           onClick={() => setOpen(false)}
-          className="text-slate-400 hover:text-slate-700 text-sm"
+          className="text-slate-400 dark:text-slate-500 hover:text-slate-700 text-sm"
         >
           Cancelar
         </button>
@@ -55,32 +55,32 @@ export default function NewSongForm() {
           name="title"
           required
           placeholder="Título de la canción"
-          className="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm md:col-span-2"
+          className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm md:col-span-2"
         />
         <input
           name="artist_or_album"
           placeholder="Artista / Álbum"
-          className="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm"
+          className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
         />
         <input
           name="key_note"
           placeholder="Tono (ej. G, D)"
-          className="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm"
+          className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
         />
         <input
           name="bpm"
           type="number"
           placeholder="BPM"
-          className="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm"
+          className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
         />
         <input
           name="time_signature"
           placeholder="Compás (ej. 4/4)"
-          className="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm"
+          className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
         />
         <select
           name="category"
-          className="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm"
+          className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
           defaultValue=""
         >
           <option value="">Categoría (opcional)</option>
@@ -93,11 +93,11 @@ export default function NewSongForm() {
         <input
           name="youtube_url"
           placeholder="Enlace de YouTube (opcional)"
-          className="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm md:col-span-3"
+          className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm md:col-span-3"
         />
 
-        <div className="md:col-span-3 flex flex-col gap-2 border-t border-slate-100 pt-3">
-          <span className="text-xs font-semibold text-slate-500">Color de la tarjeta</span>
+        <div className="md:col-span-3 flex flex-col gap-2 border-t border-slate-100 dark:border-slate-800 pt-3">
+          <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">Color de la tarjeta</span>
           <div className="flex items-center gap-2 flex-wrap">
             {Object.entries(SONG_COLORS).map(([key, val]) => (
               <button
@@ -106,17 +106,17 @@ export default function NewSongForm() {
                 title={val.label}
                 onClick={() => setColor(key)}
                 className={`w-7 h-7 rounded-full ${val.swatch} border-2 transition-all ${
-                  color === key ? 'border-slate-800 scale-110' : 'border-transparent'
+                  color === key ? 'border-slate-800 dark:border-white scale-110' : 'border-transparent'
                 }`}
               />
             ))}
           </div>
         </div>
 
-        <div className="md:col-span-3 flex items-center gap-3 border-t border-slate-100 pt-3">
+        <div className="md:col-span-3 flex items-center gap-3 border-t border-slate-100 dark:border-slate-800 pt-3">
           <select
             name="file_type"
-            className="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm"
+            className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm"
             defaultValue="partitura"
           >
             <option value="partitura">Partitura</option>
@@ -132,7 +132,7 @@ export default function NewSongForm() {
           />
         </div>
 
-        {error && <p className="text-sm text-red-600 md:col-span-3">{error}</p>}
+        {error && <p className="text-sm text-red-600 dark:text-red-400 md:col-span-3">{error}</p>}
 
         <button
           type="submit"

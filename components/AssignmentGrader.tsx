@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { gradeAssignment } from '@/app/tareas/actions';
 
 const statusStyles: Record<string, string> = {
-  pendiente: 'bg-slate-100 text-slate-500',
-  en_progreso: 'bg-amber-50 text-amber-700',
-  completada: 'bg-emerald-50 text-emerald-700',
+  pendiente: 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400',
+  en_progreso: 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300',
+  completada: 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300',
 };
 
 const statusLabels: Record<string, string> = {
@@ -40,11 +40,11 @@ export default function AssignmentGrader({ assignment }: { assignment: any }) {
   }
 
   return (
-    <div className="flex flex-col gap-1.5 py-2 border-b border-slate-50 last:border-0">
+    <div className="flex flex-col gap-1.5 py-2 border-b border-slate-50 dark:border-slate-800/60 last:border-0">
       <div className="flex items-center justify-between text-sm gap-2">
-        <span className="text-slate-700 min-w-0 truncate">
+        <span className="text-slate-700 dark:text-slate-300 min-w-0 truncate">
           {assignment.profiles?.full_name}{' '}
-          <span className="text-slate-400 text-xs">
+          <span className="text-slate-400 dark:text-slate-500 text-xs">
             {assignment.profiles?.instrument ? `· ${assignment.profiles.instrument}` : ''}
           </span>
         </span>
@@ -61,17 +61,17 @@ export default function AssignmentGrader({ assignment }: { assignment: any }) {
             href={assignment.submission_file_url}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1 text-xs text-blue-600 font-semibold"
+            className="inline-flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 font-semibold"
           >
             <span className="material-symbols-outlined text-[14px]">description</span>
             Ver entrega
           </a>
         ) : (
-          <span className="text-xs text-slate-400">Sin archivo entregado</span>
+          <span className="text-xs text-slate-400 dark:text-slate-500">Sin archivo entregado</span>
         )}
 
         <div className="flex items-center gap-1.5 ml-auto">
-          <label className="text-[11px] text-slate-400">Nota:</label>
+          <label className="text-[11px] text-slate-400 dark:text-slate-500">Nota:</label>
           <input
             type="number"
             min={0}
@@ -82,7 +82,7 @@ export default function AssignmentGrader({ assignment }: { assignment: any }) {
               setSaved(false);
             }}
             placeholder="0-20"
-            className="w-16 px-2 py-1 rounded-md border border-slate-200 text-xs"
+            className="w-16 px-2 py-1 rounded-md border border-slate-200 dark:border-slate-700 text-xs"
           />
           <button
             type="button"
@@ -95,9 +95,9 @@ export default function AssignmentGrader({ assignment }: { assignment: any }) {
         </div>
       </div>
       {assignment.submission_note && (
-        <p className="text-xs text-slate-500 italic">"{assignment.submission_note}"</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400 italic">"{assignment.submission_note}"</p>
       )}
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && <p className="text-xs text-red-600 dark:text-red-400">{error}</p>}
     </div>
   );
 }

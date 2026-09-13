@@ -37,10 +37,10 @@ export default async function CancionesPage({
       <div className="flex flex-col gap-6">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-amber-600 mb-1">
+            <p className="text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 mb-1">
               Repertorio & Temas
             </p>
-            <h1 className="text-2xl font-bold text-slate-900">Cancionero</h1>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Cancionero</h1>
           </div>
           {profile?.role === 'director' && <NewSongForm />}
         </div>
@@ -56,27 +56,27 @@ export default async function CancionesPage({
                 song.color_tag
               )}`}
             >
-              <h3 className="font-bold text-slate-900 leading-tight">{song.title}</h3>
-              <p className="text-xs text-slate-500 mt-0.5">{song.artist_or_album}</p>
+              <h3 className="font-bold text-slate-900 dark:text-slate-100 leading-tight">{song.title}</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{song.artist_or_album}</p>
               <div className="flex flex-wrap gap-2 mt-3 text-xs">
                 {song.category && (
-                  <span className="px-2 py-0.5 rounded-md bg-blue-50 border border-blue-100 text-blue-700 font-medium">
+                  <span className="px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-800/50 text-blue-700 dark:text-blue-300 font-medium">
                     {song.category}
                   </span>
                 )}
                 {song.key_note && (
-                  <span className="px-2 py-0.5 rounded-md bg-amber-50 border border-amber-100 text-amber-700 font-medium">
+                  <span className="px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/40 border border-amber-100 dark:border-amber-800/50 text-amber-700 dark:text-amber-300 font-medium">
                     Tono {song.key_note}
                   </span>
                 )}
               </div>
-              <p className="text-[11px] text-slate-400 mt-3">
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-3">
                 {song.song_files?.[0]?.count ?? 0} archivo(s) adjunto(s)
               </p>
             </Link>
           ))}
           {(!songs || songs.length === 0) && (
-            <p className="text-slate-400 text-sm col-span-full">
+            <p className="text-slate-400 dark:text-slate-500 text-sm col-span-full">
               {q || category
                 ? 'No se encontraron canciones con ese criterio de búsqueda.'
                 : 'Aún no hay canciones en el cancionero.'}

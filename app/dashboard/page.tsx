@@ -34,14 +34,14 @@ export default async function DashboardPage() {
       <div className="flex flex-col gap-8">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-amber-600 mb-1">
+            <p className="text-xs font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 mb-1">
               {setlist ? 'En directo próximo domingo' : 'Sin servicio programado'}
             </p>
-            <h1 className="text-3xl font-bold text-slate-900">
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
               {setlist?.title ?? 'Aún no hay un repertorio para el próximo domingo'}
             </h1>
             {setlist && (
-              <p className="text-slate-500 mt-1">
+              <p className="text-slate-500 dark:text-slate-400 mt-1">
                 {new Date(setlist.service_date + 'T00:00:00').toLocaleDateString('es-ES', {
                   weekday: 'long',
                   day: 'numeric',
@@ -72,27 +72,27 @@ export default async function DashboardPage() {
                 )}`}
               >
                 {item.section_label && (
-                  <span className="self-start mb-2 px-2 py-0.5 rounded bg-amber-50 border border-amber-200/70 text-amber-700 text-[10px] font-bold tracking-wider uppercase">
+                  <span className="self-start mb-2 px-2 py-0.5 rounded bg-amber-50 dark:bg-amber-950/40 border border-amber-200/70 dark:border-amber-800/50 text-amber-700 dark:text-amber-300 text-[10px] font-bold tracking-wider uppercase">
                     {item.section_label}
                   </span>
                 )}
-                <h3 className="font-bold text-slate-900 leading-tight">{item.songs.title}</h3>
-                <p className="text-xs text-slate-500 mt-0.5">{item.songs.artist_or_album}</p>
+                <h3 className="font-bold text-slate-900 dark:text-slate-100 leading-tight">{item.songs.title}</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{item.songs.artist_or_album}</p>
                 <div className="flex items-center gap-2 mt-3 text-xs">
                   {item.songs.key_note && (
-                    <span className="px-2 py-0.5 rounded bg-amber-50 border border-amber-200/70 text-amber-700 font-bold">
+                    <span className="px-2 py-0.5 rounded bg-amber-50 dark:bg-amber-950/40 border border-amber-200/70 dark:border-amber-800/50 text-amber-700 dark:text-amber-300 font-bold">
                       TONO: {item.songs.key_note}
                     </span>
                   )}
                   {item.songs.bpm && (
-                    <span className="px-2 py-0.5 rounded bg-blue-50 border border-blue-200/70 text-blue-700 font-semibold">
+                    <span className="px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/40 border border-blue-200/70 dark:border-blue-800/50 text-blue-700 dark:text-blue-300 font-semibold">
                       {item.songs.bpm} BPM
                     </span>
                   )}
                 </div>
                 <Link
                   href={`/canciones/${item.songs.id}`}
-                  className="mt-3 text-xs font-semibold text-blue-600 hover:text-blue-700"
+                  className="mt-3 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700"
                 >
                   Ver partitura →
                 </Link>
@@ -104,25 +104,25 @@ export default async function DashboardPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Link
             href="/tareas"
-            className="flex items-center justify-between bg-white rounded-xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all"
+            className="flex items-center justify-between bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200/80 dark:border-slate-700/80 shadow-sm hover:shadow-md transition-all"
           >
             <div>
-              <p className="text-sm text-slate-500">Tareas pendientes para ti</p>
-              <p className="text-2xl font-bold text-slate-900">{pendingTasksCount ?? 0}</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Tareas pendientes para ti</p>
+              <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{pendingTasksCount ?? 0}</p>
             </div>
-            <span className="material-symbols-outlined text-amber-600 text-[32px]">
+            <span className="material-symbols-outlined text-amber-600 dark:text-amber-400 text-[32px]">
               task_alt
             </span>
           </Link>
           <Link
             href="/canciones"
-            className="flex items-center justify-between bg-white rounded-xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all"
+            className="flex items-center justify-between bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200/80 dark:border-slate-700/80 shadow-sm hover:shadow-md transition-all"
           >
             <div>
-              <p className="text-sm text-slate-500">Ir al cancionero completo</p>
-              <p className="text-2xl font-bold text-slate-900">Ver todas</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Ir al cancionero completo</p>
+              <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">Ver todas</p>
             </div>
-            <span className="material-symbols-outlined text-blue-600 text-[32px]">
+            <span className="material-symbols-outlined text-blue-600 dark:text-blue-400 text-[32px]">
               queue_music
             </span>
           </Link>

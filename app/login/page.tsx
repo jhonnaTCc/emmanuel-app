@@ -56,23 +56,23 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
-      <div className="w-full max-w-sm bg-white border border-slate-200 rounded-xl shadow-sm p-8">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 px-4">
+      <div className="w-full max-w-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm p-8">
         <div className="flex flex-col items-center mb-6">
           <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-lg mb-3">
             E
           </div>
-          <h1 className="text-xl font-bold text-slate-900">Emmanuel</h1>
-          <p className="text-xs font-semibold uppercase tracking-wider text-amber-600 mt-1">
+          <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">Emmanuel</h1>
+          <p className="text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400 mt-1">
             Ministerio de Alabanza
           </p>
         </div>
 
-        <div className="flex mb-6 rounded-lg bg-slate-100 p-1">
+        <div className="flex mb-6 rounded-lg bg-slate-100 dark:bg-slate-800 p-1">
           <button
             onClick={() => setMode('login')}
             className={`flex-1 py-2 rounded-md text-sm font-semibold transition-all ${
-              mode === 'login' ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-500'
+              mode === 'login' ? 'bg-white dark:bg-slate-900 text-blue-700 dark:text-blue-300 shadow-sm' : 'text-slate-500 dark:text-slate-400'
             }`}
           >
             Iniciar sesión
@@ -80,7 +80,7 @@ export default function LoginPage() {
           <button
             onClick={() => setMode('signup')}
             className={`flex-1 py-2 rounded-md text-sm font-semibold transition-all ${
-              mode === 'signup' ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-500'
+              mode === 'signup' ? 'bg-white dark:bg-slate-900 text-blue-700 dark:text-blue-300 shadow-sm' : 'text-slate-500 dark:text-slate-400'
             }`}
           >
             Registrarme
@@ -96,14 +96,14 @@ export default function LoginPage() {
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="px-3 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500"
+                className="px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/40 focus:border-blue-500 dark:focus:border-blue-500"
               />
               <input
                 type="text"
                 placeholder="Instrumento / rol (ej. Guitarra, Voz, Audio)"
                 value={instrument}
                 onChange={(e) => setInstrument(e.target.value)}
-                className="px-3 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500"
+                className="px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/40 focus:border-blue-500 dark:focus:border-blue-500"
               />
             </>
           )}
@@ -113,7 +113,7 @@ export default function LoginPage() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="px-3 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500"
+            className="px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/40 focus:border-blue-500 dark:focus:border-blue-500"
           />
           <input
             type="password"
@@ -122,11 +122,11 @@ export default function LoginPage() {
             minLength={6}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="px-3 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-500"
+            className="px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/40 focus:border-blue-500 dark:focus:border-blue-500"
           />
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
-          {info && <p className="text-sm text-emerald-600">{info}</p>}
+          {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+          {info && <p className="text-sm text-emerald-600 dark:text-emerald-400">{info}</p>}
 
           <button
             type="submit"
@@ -138,7 +138,7 @@ export default function LoginPage() {
         </form>
 
         {mode === 'signup' && (
-          <p className="text-xs text-slate-400 mt-4 text-center">
+          <p className="text-xs text-slate-400 dark:text-slate-500 mt-4 text-center">
             Tu cuenta entrará como "miembro". El director puede ascenderte a director desde
             "Equipo" si corresponde.
           </p>

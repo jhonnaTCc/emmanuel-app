@@ -21,10 +21,10 @@ export default async function EquipoPage() {
     <AppShell fullName={profile?.full_name ?? ''} role={profile?.role ?? ''}>
       <div className="flex flex-col gap-6">
         <div>
-          <p className="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">
+          <p className="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-1">
             Ministerio de Alabanza
           </p>
-          <h1 className="text-2xl font-bold text-slate-900">Equipo</h1>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Equipo</h1>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {withStats.map((m: any) => (

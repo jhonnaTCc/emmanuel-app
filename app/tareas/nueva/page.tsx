@@ -9,7 +9,7 @@ export default async function NuevaTareaPage() {
   if (profile?.role !== 'director') {
     return (
       <AppShell fullName={profile?.full_name ?? ''} role={profile?.role ?? ''}>
-        <p className="text-slate-500">Solo el director puede crear tareas.</p>
+        <p className="text-slate-500 dark:text-slate-400">Solo el director puede crear tareas.</p>
       </AppShell>
     );
   }
@@ -28,10 +28,10 @@ export default async function NuevaTareaPage() {
     <AppShell fullName={profile.full_name} role={profile.role}>
       <div className="flex flex-col gap-6">
         <div>
-          <p className="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">
+          <p className="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-1">
             Nueva asignación
           </p>
-          <h1 className="text-2xl font-bold text-slate-900">Crear Tarea Semanal</h1>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Crear Tarea Semanal</h1>
         </div>
         <NewTaskForm members={members ?? []} songs={songs ?? []} categories={categories ?? []} />
       </div>

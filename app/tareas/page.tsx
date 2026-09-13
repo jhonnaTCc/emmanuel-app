@@ -30,10 +30,10 @@ export default async function TareasPage() {
         <div className="flex flex-col gap-8">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">
+              <p className="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-1">
                 Asignaciones & Ensayos del Equipo
               </p>
-              <h1 className="text-2xl font-bold text-slate-900">Tareas Semanales</h1>
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Tareas Semanales</h1>
             </div>
             <Link
               href="/tareas/nueva"
@@ -45,7 +45,7 @@ export default async function TareasPage() {
           </div>
 
           <div>
-            <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wide mb-3">
+            <h2 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-3">
               Equipo (toca a alguien para ver todas sus tareas)
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -53,13 +53,13 @@ export default async function TareasPage() {
                 <MemberTaskSummary key={m.id} member={m} />
               ))}
               {membersWithStats.length === 0 && (
-                <p className="text-slate-400 text-sm col-span-full">Aún no hay miembros registrados.</p>
+                <p className="text-slate-400 dark:text-slate-500 text-sm col-span-full">Aún no hay miembros registrados.</p>
               )}
             </div>
           </div>
 
           <div>
-            <h2 className="text-sm font-bold text-slate-500 uppercase tracking-wide mb-3">
+            <h2 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-3">
               Tareas creadas
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -67,7 +67,7 @@ export default async function TareasPage() {
                 <TaskCardDirector key={task.id} task={task} categories={categories ?? []} />
               ))}
               {(!tasks || tasks.length === 0) && (
-                <p className="text-slate-400 text-sm col-span-full">Aún no hay tareas creadas.</p>
+                <p className="text-slate-400 dark:text-slate-500 text-sm col-span-full">Aún no hay tareas creadas.</p>
               )}
             </div>
           </div>
@@ -87,17 +87,17 @@ export default async function TareasPage() {
     <AppShell fullName={profile?.full_name ?? ''} role={profile?.role ?? ''}>
       <div className="flex flex-col gap-6">
         <div>
-          <p className="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">
+          <p className="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-1">
             Mis tareas
           </p>
-          <h1 className="text-2xl font-bold text-slate-900">Tareas Semanales</h1>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Tareas Semanales</h1>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {(assignments ?? []).map((a: any) => (
             <TaskAssignmentCard key={a.id} assignment={a} task={a.tasks} />
           ))}
           {(!assignments || assignments.length === 0) && (
-            <p className="text-slate-400 text-sm col-span-full">
+            <p className="text-slate-400 dark:text-slate-500 text-sm col-span-full">
               No tienes tareas asignadas por ahora.
             </p>
           )}

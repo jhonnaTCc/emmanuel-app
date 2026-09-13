@@ -54,7 +54,7 @@ export default function EditTaskExtras({
       <div className="flex items-center gap-3">
         <button
           onClick={() => setOpen(true)}
-          className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700"
+          className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700"
         >
           <span className="material-symbols-outlined text-[16px]">edit</span>
           Editar
@@ -62,7 +62,7 @@ export default function EditTaskExtras({
         <button
           onClick={handleDelete}
           disabled={loading}
-          className="inline-flex items-center gap-1 text-xs font-semibold text-red-500 hover:text-red-700 disabled:opacity-60"
+          className="inline-flex items-center gap-1 text-xs font-semibold text-red-500 dark:text-red-400 hover:text-red-700 disabled:opacity-60"
         >
           <span className="material-symbols-outlined text-[16px]">delete</span>
           Eliminar
@@ -74,21 +74,21 @@ export default function EditTaskExtras({
   return (
     <form
       action={handleSubmit}
-      className="flex flex-col gap-3 bg-slate-50 border border-slate-200 rounded-xl p-4"
+      className="flex flex-col gap-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4"
     >
       <input
         name="title"
         required
         defaultValue={task.title}
         placeholder="Título de la tarea"
-        className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-sm"
+        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm"
       />
       <textarea
         name="description"
         defaultValue={task.description ?? ''}
         placeholder="Descripción / instrucciones"
         rows={2}
-        className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-white text-sm"
+        className="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm"
       />
       <div className="grid grid-cols-2 gap-3">
         <TaskCategorySelect categories={categories} defaultValue={task.category ?? ''} />
@@ -96,12 +96,12 @@ export default function EditTaskExtras({
           name="due_date"
           type="datetime-local"
           defaultValue={task.due_date ? task.due_date.slice(0, 16) : ''}
-          className="px-3 py-2 rounded-lg border border-slate-200 bg-white text-sm"
+          className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm"
         />
       </div>
 
       <div>
-        <span className="text-xs font-semibold text-slate-500 mb-1 block">
+        <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 block">
           Color de la tarjeta
         </span>
         <div className="flex items-center gap-2 flex-wrap">
@@ -112,14 +112,14 @@ export default function EditTaskExtras({
               title={val.label}
               onClick={() => setColor(key)}
               className={`w-7 h-7 rounded-full ${val.swatch} border-2 transition-all ${
-                color === key ? 'border-slate-800 scale-110' : 'border-transparent'
+                color === key ? 'border-slate-800 dark:border-white scale-110' : 'border-transparent'
               }`}
             />
           ))}
         </div>
       </div>
 
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && <p className="text-xs text-red-600 dark:text-red-400">{error}</p>}
 
       <div className="flex items-center gap-2">
         <button
@@ -132,7 +132,7 @@ export default function EditTaskExtras({
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-500 hover:bg-slate-100"
+          className="px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-500 dark:text-slate-400 hover:bg-slate-100"
         >
           Cancelar
         </button>
