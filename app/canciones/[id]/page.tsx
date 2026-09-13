@@ -21,7 +21,7 @@ export default async function SongDetailPage({ params }: { params: { id: string 
   if (!song) {
     return (
       <AppShell fullName={profile?.full_name ?? ''} role={profile?.role ?? ''}>
-        <p className="text-slate-500">Canción no encontrada.</p>
+        <p className="text-slate-500 dark:text-slate-400">Canción no encontrada.</p>
       </AppShell>
     );
   }
@@ -45,28 +45,28 @@ export default async function SongDetailPage({ params }: { params: { id: string 
       <div className="flex flex-col gap-6 max-w-3xl">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-2">
           <div className="min-w-0">
-            <h1 className="text-xl md:text-2xl font-bold text-slate-900 break-words">
+            <h1 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white break-words">
               {song.title}
             </h1>
-            <p className="text-slate-500">{song.artist_or_album}</p>
+            <p className="text-slate-500 dark:text-slate-400">{song.artist_or_album}</p>
             <div className="flex flex-wrap gap-2 mt-3 text-xs">
               {song.key_note && (
-                <span className="px-2 py-0.5 rounded-md bg-amber-50 border border-amber-100 text-amber-700 font-medium">
+                <span className="px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-400/10 border border-amber-100 dark:border-amber-400/30 text-amber-700 dark:text-amber-400 font-medium">
                   Tono {song.key_note}
                 </span>
               )}
               {song.bpm && (
-                <span className="px-2 py-0.5 rounded-md bg-blue-50 border border-blue-100 text-blue-700 font-medium">
+                <span className="px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/30 text-blue-700 dark:text-blue-400 font-medium">
                   {song.bpm} BPM
                 </span>
               )}
               {song.time_signature && (
-                <span className="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-slate-600 font-medium">
+                <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-medium">
                   {song.time_signature}
                 </span>
               )}
               {song.category && (
-                <span className="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-slate-600 font-medium">
+                <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-medium">
                   {song.category}
                 </span>
               )}
@@ -74,7 +74,7 @@ export default async function SongDetailPage({ params }: { params: { id: string 
           </div>
           {profile?.role === 'director' && (
             <form action={handleDelete} className="flex-shrink-0">
-              <button className="text-sm text-red-500 hover:text-red-700 font-semibold whitespace-nowrap">
+              <button className="text-sm text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-semibold whitespace-nowrap">
                 Eliminar canción
               </button>
             </form>
@@ -83,8 +83,8 @@ export default async function SongDetailPage({ params }: { params: { id: string 
 
         {/* Video de YouTube (tutorial / referencia) */}
         {youtubeId && (
-          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-            <h2 className="font-bold text-slate-900 mb-3">Video / Tutorial</h2>
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+            <h2 className="font-bold text-slate-900 dark:text-white mb-3">Video / Tutorial</h2>
             <div className="aspect-video w-full rounded-lg overflow-hidden bg-black">
               <iframe
                 src={`https://www.youtube.com/embed/${youtubeId}`}
@@ -98,30 +98,30 @@ export default async function SongDetailPage({ params }: { params: { id: string 
         )}
 
         {/* Letra con acordes y control de tonalidad */}
-        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-          <h2 className="font-bold text-slate-900 mb-3">Letra y acordes</h2>
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+          <h2 className="font-bold text-slate-900 dark:text-white mb-3">Letra y acordes</h2>
           <LyricsChords lyricsChordpro={song.lyrics_chordpro} originalKey={song.key_note} />
         </div>
 
         {profile?.role === 'director' && (
-          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm">
             <EditSongExtras song={song} />
           </div>
         )}
 
-        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-          <h2 className="font-bold text-slate-900 mb-3">Archivos</h2>
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+          <h2 className="font-bold text-slate-900 dark:text-white mb-3">Archivos</h2>
           <SongFilesList files={files ?? []} />
 
           {profile?.role === 'director' && (
             <form
               action={handleUpload}
-              className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mt-4 pt-4 border-t border-slate-100"
+              className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mt-4 pt-4 border-t border-slate-100 dark:border-slate-800"
             >
               <select
                 name="file_type"
                 defaultValue="partitura"
-                className="px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm w-full sm:w-auto"
+                className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-sm w-full sm:w-auto"
               >
                 <option value="partitura">Partitura</option>
                 <option value="cifrado">Cifrado</option>
@@ -132,7 +132,7 @@ export default async function SongDetailPage({ params }: { params: { id: string 
                 name="file"
                 type="file"
                 required
-                className="text-sm w-full sm:flex-1 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-slate-100 file:text-slate-700 file:text-xs file:font-semibold"
+                className="text-sm text-slate-700 dark:text-slate-300 w-full sm:flex-1 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-slate-100 dark:file:bg-slate-800 file:text-slate-700 dark:file:text-slate-200 file:text-xs file:font-semibold"
               />
               <button className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold w-full sm:w-auto flex-shrink-0">
                 Subir
