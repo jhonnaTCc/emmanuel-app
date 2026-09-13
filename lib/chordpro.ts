@@ -41,8 +41,19 @@ function capitalize(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
+// Tags genéricos de "comentario" que usan varias apps/sitios de cifrados
+// para marcar cualquier sección (ej. {comment: Primera Parte}, {c: Puente 2}).
+// Para estos, el nombre real de la sección va en "extra", no hay que anteponer nada.
+const GENERIC_COMMENT_TAGS = new Set(['comment', 'c', 'comentario']);
+
 function resolveSectionLabel(tag: string, extra?: string): string {
-  const base = SECTION_LABELS[tag.toLowerCase()] ?? capitalize(tag);
+  const normalizedTag = tag.toLowerCase();
+
+  if (GENERIC_COMMENT_TAGS.has(normalizedTag)) {
+    return extra ? extra.trim() : 'Nota';
+  }
+
+  const base = SECTION_LABELS[normalizedTag] ?? capitalize(tag);
   return extra ? `${base} ${extra}`.trim() : base;
 }
 
