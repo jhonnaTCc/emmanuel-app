@@ -14,11 +14,28 @@ type LyricsChordsProps = {
   originalKey: string | null; // viene de song.key_note
 };
 
+// Arma el texto plano (sin acordes) para copiar y pegar en el software de proyección,
+// con cada sección separada por una línea en blanco y su etiqueta en mayúsculas.
+function buildPlainText(sections: ReturnType<typeof parseChordPro>): string {
+  return sections
+    .map((section) => {
+      const heading = section.label ? `${section.label.toUpperCase()}\n` : '';
+      const lyricLines = section.lines
+        .map((line) => line.map((seg) => seg.lyric).join(''))
+        .join('\n');
+      return `${heading}${lyricLines}`;
+    })
+    .join('\n\n');
+}
+
 export default function LyricsChords({ lyricsChordpro, originalKey }: LyricsChordsProps) {
   const [semitones, setSemitones] = useState(0);
   const [fontScale, setFontScale] = useState(1);
+  const [showChords, setShowChords] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   const sections = useMemo(() => parseChordPro(lyricsChordpro ?? ''), [lyricsChordpro]);
+  const plainText = useMemo(() => buildPlainText(sections), [sections]);
   const baseKey = originalKey || '—';
   const currentKey = originalKey ? getKeyLabel(originalKey, semitones) : '—';
 
@@ -30,46 +47,87 @@ export default function LyricsChords({ lyricsChordpro, originalKey }: LyricsChor
     );
   }
 
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(plainText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Si el navegador bloquea el portapapeles, no rompemos la UI, simplemente no marcamos "copiado"
+    }
+  }
+
   return (
     <div>
-      {/* Barra de controles: tonalidad + tamaño de letra */}
-      <div className="flex items-center justify-between flex-wrap gap-2 border-b border-slate-100 pb-3 mb-4">
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-slate-500">Tonalidad</span>
+      {/* Barra de controles: modo de vista, tonalidad y tamaño de letra */}
+      <div className="flex items-center justify-between flex-wrap gap-3 border-b border-slate-100 pb-3 mb-4">
+        <div className="flex items-center gap-1 bg-slate-100 rounded-full p-0.5">
           <button
             type="button"
-            onClick={() => setSemitones((s) => s - 1)}
-            disabled={!originalKey}
-            className="w-7 h-7 rounded-full border border-slate-200 flex items-center justify-center text-sm hover:bg-slate-50 disabled:opacity-40"
-            aria-label="Bajar un semitono"
+            onClick={() => setShowChords(true)}
+            className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
+              showChords ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500'
+            }`}
           >
-            −
+            Con acordes
           </button>
-          <span className="px-2 py-0.5 rounded-md bg-amber-50 border border-amber-100 text-amber-700 font-semibold text-sm min-w-[28px] text-center">
-            {currentKey}
-          </span>
           <button
             type="button"
-            onClick={() => setSemitones((s) => s + 1)}
-            disabled={!originalKey}
-            className="w-7 h-7 rounded-full border border-slate-200 flex items-center justify-center text-sm hover:bg-slate-50 disabled:opacity-40"
-            aria-label="Subir un semitono"
+            onClick={() => setShowChords(false)}
+            className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
+              !showChords ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500'
+            }`}
           >
-            +
+            Solo letra
           </button>
-          {semitones !== 0 && (
-            <span className="text-xs text-slate-400">orig. {baseKey}</span>
-          )}
-          {semitones !== 0 && (
+        </div>
+
+        {showChords ? (
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-slate-500">Tonalidad</span>
             <button
               type="button"
-              onClick={() => setSemitones(0)}
-              className="text-xs font-semibold text-blue-600 hover:text-blue-700"
+              onClick={() => setSemitones((s) => s - 1)}
+              disabled={!originalKey}
+              className="w-7 h-7 rounded-full border border-slate-200 flex items-center justify-center text-sm hover:bg-slate-50 disabled:opacity-40"
+              aria-label="Bajar un semitono"
             >
-              Restablecer
+              −
             </button>
-          )}
-        </div>
+            <span className="px-2 py-0.5 rounded-md bg-amber-50 border border-amber-100 text-amber-700 font-semibold text-sm min-w-[28px] text-center">
+              {currentKey}
+            </span>
+            <button
+              type="button"
+              onClick={() => setSemitones((s) => s + 1)}
+              disabled={!originalKey}
+              className="w-7 h-7 rounded-full border border-slate-200 flex items-center justify-center text-sm hover:bg-slate-50 disabled:opacity-40"
+              aria-label="Subir un semitono"
+            >
+              +
+            </button>
+            {semitones !== 0 && (
+              <span className="text-xs text-slate-400">orig. {baseKey}</span>
+            )}
+            {semitones !== 0 && (
+              <button
+                type="button"
+                onClick={() => setSemitones(0)}
+                className="text-xs font-semibold text-blue-600 hover:text-blue-700"
+              >
+                Restablecer
+              </button>
+            )}
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={handleCopy}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold"
+          >
+            {copied ? '¡Copiado!' : 'Copiar letra'}
+          </button>
+        )}
 
         <div className="flex items-center gap-1">
           <button
@@ -108,8 +166,19 @@ export default function LyricsChords({ lyricsChordpro, originalKey }: LyricsChor
                   {section.label}
                 </span>
               )}
-              <div className={isChorus ? 'space-y-3 border-l-2 border-blue-200 pl-3' : 'space-y-3'}>
+              <div className={isChorus && showChords ? 'space-y-3 border-l-2 border-blue-200 pl-3' : 'space-y-3'}>
                 {section.lines.map((line, lIdx) => {
+                  if (!showChords) {
+                    // Modo "solo letra": une los segmentos en una sola línea de texto plano,
+                    // ideal para leer o copiar hacia el software de proyección.
+                    const plainLine = line.map((seg) => seg.lyric).join('');
+                    return (
+                      <p key={lIdx} className="leading-relaxed text-slate-800">
+                        {plainLine || '\u00A0'}
+                      </p>
+                    );
+                  }
+
                   const transposed = transposeLine(line, semitones);
                   return (
                     <p key={lIdx} className="leading-loose text-slate-800">
