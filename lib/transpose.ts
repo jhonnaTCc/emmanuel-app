@@ -56,6 +56,35 @@ export function transposeLine(
 }
 
 /**
+ * Arma una línea de acordes y una de letra alineadas por columnas, como en
+ * los sitios de cifrados en texto plano (Cifra Club, La Cuerda, etc).
+ * El acorde se coloca en la columna donde empieza la sílaba correspondiente,
+ * pero nunca antes de donde terminó el acorde anterior (con al menos 2
+ * espacios de separación) — esto evita que acordes seguidos sin letra entre
+ * medio (ej. una línea de Intro con solo acordes) queden pegados.
+ */
+export function renderTabLine(
+  line: ChordProLine,
+  semitones: number,
+  useFlats = false
+): { chordRow: string; lyricRow: string } {
+  let lyricRow = '';
+  let chordRow = '';
+
+  for (const seg of line) {
+    if (seg.chord) {
+      const chord = transposeChord(seg.chord, semitones, useFlats);
+      const minPos = chordRow.length > 0 ? chordRow.length + 2 : 0;
+      const targetPos = Math.max(lyricRow.length, minPos);
+      chordRow = chordRow.padEnd(targetPos, ' ') + chord;
+    }
+    lyricRow += seg.lyric;
+  }
+
+  return { chordRow, lyricRow: lyricRow.replace(/\s+$/, '') };
+}
+
+/**
  * Calcula la etiqueta de tonalidad a mostrar en la barra de controles,
  * ej. getKeyLabel('G', 2) -> 'A'
  */

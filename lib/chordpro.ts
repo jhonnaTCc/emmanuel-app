@@ -107,11 +107,15 @@ export function parseChordPro(text: string): ChordProSection[] {
       continue;
     }
 
-    // Línea vacía: separa párrafos cuando no se usan directivas explícitas
+    // Línea vacía: la tratamos como un espacio DENTRO de la sección actual,
+    // no como el inicio de una sección nueva. Así un bloque como [Intro] con
+    // varias líneas de acordes separadas por líneas en blanco (solo por
+    // legibilidad al escribirlo) se sigue mostrando junto, bajo una sola etiqueta.
     if (line === '') {
-      if (current.lines.length > 0) {
-        flushCurrent();
-        current = { label: null, lines: [] };
+      const lastLine = current.lines[current.lines.length - 1];
+      const alreadyHasBlankMarker = lastLine && lastLine.length === 0;
+      if (current.lines.length > 0 && !alreadyHasBlankMarker) {
+        current.lines.push([]); // marcador de "línea en blanco" dentro de la sección
       }
       continue;
     }

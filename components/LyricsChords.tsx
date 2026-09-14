@@ -8,7 +8,7 @@
 
 import { useMemo, useState } from 'react';
 import { parseChordPro } from '@/lib/chordpro';
-import { transposeLine, getKeyLabel } from '@/lib/transpose';
+import { renderTabLine, getKeyLabel } from '@/lib/transpose';
 
 type LyricsChordsProps = {
   lyricsChordpro: string | null;
@@ -155,10 +155,7 @@ export default function LyricsChords({ lyricsChordpro, originalKey }: LyricsChor
       </div>
 
       {/* Secciones de la canción */}
-      <div
-        style={{ fontSize: `${fontScale}rem` }}
-        className="space-y-5 dark:font-mono"
-      >
+      <div style={{ fontSize: `${fontScale}rem` }} className="space-y-5">
         {sections.map((section, sIdx) => {
           const isChorus = section.label?.startsWith('Coro') ?? false;
           return (
@@ -183,11 +180,16 @@ export default function LyricsChords({ lyricsChordpro, originalKey }: LyricsChor
               <div
                 className={
                   isChorus && showChords
-                    ? 'space-y-3 border-l-2 border-blue-200 dark:border-amber-400/30 pl-3'
-                    : 'space-y-3'
+                    ? 'space-y-1 border-l-2 border-blue-200 dark:border-amber-400/30 pl-3'
+                    : 'space-y-1'
                 }
               >
                 {section.lines.map((line, lIdx) => {
+                  // Marcador de línea en blanco (separación visual dentro de la sección)
+                  if (line.length === 0) {
+                    return <div key={lIdx} className="h-3" />;
+                  }
+
                   if (!showChords) {
                     // Modo "solo letra": une los segmentos en una sola línea de texto plano,
                     // ideal para leer o copiar hacia el software de proyección.
@@ -199,20 +201,22 @@ export default function LyricsChords({ lyricsChordpro, originalKey }: LyricsChor
                     );
                   }
 
-                  const transposed = transposeLine(line, semitones);
+                  // Modo "Con acordes": alineado por columnas como una tablatura de texto,
+                  // usando espacios reales para que el acorde quede exacto sobre su sílaba.
+                  const { chordRow, lyricRow } = renderTabLine(line, semitones);
                   return (
-                    <p key={lIdx} className="leading-loose text-slate-800 dark:text-slate-100">
-                      {transposed.map((seg, segIdx) => (
-                        <span key={segIdx} className="inline-block align-bottom">
-                          {seg.chord && (
-                            <span className="block text-blue-600 dark:text-amber-400 font-bold text-[0.8em] leading-none mb-0.5">
-                              {seg.chord}
-                            </span>
-                          )}
-                          <span className="block whitespace-pre">{seg.lyric || '\u00A0'}</span>
-                        </span>
-                      ))}
-                    </p>
+                    <div key={lIdx} className="font-mono leading-tight">
+                      {chordRow && (
+                        <div className="whitespace-pre text-blue-600 dark:text-amber-400 font-bold">
+                          {chordRow}
+                        </div>
+                      )}
+                      {lyricRow && (
+                        <div className="whitespace-pre text-slate-800 dark:text-slate-100">
+                          {lyricRow}
+                        </div>
+                      )}
+                    </div>
                   );
                 })}
               </div>
