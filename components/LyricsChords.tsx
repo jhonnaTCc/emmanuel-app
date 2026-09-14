@@ -6,7 +6,7 @@
 // El modo oscuro/claro es global (ver lib/theme/ThemeProvider): este componente
 // solo usa las variantes dark: de Tailwind, no maneja su propio estado de tema.
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { parseChordPro } from '@/lib/chordpro';
 import { renderTabLine, getKeyLabel } from '@/lib/transpose';
 
@@ -14,6 +14,8 @@ type LyricsChordsProps = {
   lyricsChordpro: string | null;
   originalKey: string | null; // viene de song.key_note
 };
+
+type TabChunk = { chordRow: string; lyricRow: string };
 
 // Arma el texto plano (sin acordes) para copiar y pegar en el software de proyección,
 // con cada sección separada por una línea en blanco y su etiqueta en mayúsculas.
@@ -29,6 +31,91 @@ function buildPlainText(sections: ReturnType<typeof parseChordPro>): string {
     .join('\n\n');
 }
 
+// Corta un par (fila de acordes / fila de letra) en varios fragmentos que quepan
+// en "maxChars" columnas, cortando siempre en un espacio de la LETRA (nunca a
+// mitad de una palabra) para que el acorde nunca quede separado de su sílaba.
+function wrapTabPair(chordRow: string, lyricRow: string, maxChars: number): TabChunk[] {
+  const len = Math.max(chordRow.length, lyricRow.length);
+  if (len <= maxChars || maxChars <= 0) {
+    return [{ chordRow: chordRow.trimEnd(), lyricRow: lyricRow.trimEnd() }];
+  }
+
+  const c = chordRow.padEnd(len, ' ');
+  const l = lyricRow.padEnd(len, ' ');
+
+  const chunks: TabChunk[] = [];
+  let start = 0;
+
+  while (start < len) {
+    let end = Math.min(start + maxChars, len);
+
+    // Si el corte cae a mitad de una palabra, retrocede hasta el último
+    // espacio disponible en ese tramo para no partirla.
+    if (end < len) {
+      let breakAt = end;
+      while (breakAt > start && l[breakAt] !== ' ') {
+        breakAt--;
+      }
+      if (breakAt > start) {
+        end = breakAt;
+      }
+      // Si no hay ningún espacio en todo el tramo (palabra/acorde muy largo),
+      // se corta igual en maxChars para no quedarnos pegados en un loop.
+    }
+
+    const chordChunk = c.slice(start, end).trimEnd();
+    const lyricChunk = l.slice(start, end).trimEnd();
+    if (chordChunk || lyricChunk) {
+      chunks.push({ chordRow: chordChunk, lyricRow: lyricChunk });
+    }
+
+    // Salta espacios en blanco al inicio del siguiente fragmento.
+    let next = end;
+    while (next < len && l[next] === ' ' && c[next] === ' ') {
+      next++;
+    }
+    start = next > start ? next : end + 1; // evita loops infinitos en casos raros
+  }
+
+  return chunks.length ? chunks : [{ chordRow: chordRow.trimEnd(), lyricRow: lyricRow.trimEnd() }];
+}
+
+// Calcula cuántas columnas de texto monoespaciado caben en el ancho disponible,
+// midiendo un span oculto con la misma fuente/tamaño que el resto de la letra.
+// Se recalcula solo (ResizeObserver) al cambiar el tamaño de pantalla, rotar el
+// celular, o cambiar el tamaño de letra con los botones A-/A+.
+function useMonoCharsPerLine(fontScale: number) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const measureRef = useRef<HTMLSpanElement>(null);
+  const [maxChars, setMaxChars] = useState(40);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    const measure = measureRef.current;
+    if (!container || !measure) return;
+
+    const SAMPLE_LEN = 20;
+
+    function recompute() {
+      if (!container || !measure) return;
+      const containerWidth = container.clientWidth;
+      const charWidth = measure.getBoundingClientRect().width / SAMPLE_LEN;
+      if (charWidth > 0 && containerWidth > 0) {
+        // -1 de margen de seguridad para no quedar justo al borde del card.
+        const chars = Math.max(10, Math.floor(containerWidth / charWidth) - 1);
+        setMaxChars(chars);
+      }
+    }
+
+    recompute();
+    const ro = new ResizeObserver(recompute);
+    ro.observe(container);
+    return () => ro.disconnect();
+  }, [fontScale]);
+
+  return { containerRef, measureRef, maxChars };
+}
+
 export default function LyricsChords({ lyricsChordpro, originalKey }: LyricsChordsProps) {
   const [semitones, setSemitones] = useState(0);
   const [fontScale, setFontScale] = useState(1);
@@ -39,6 +126,8 @@ export default function LyricsChords({ lyricsChordpro, originalKey }: LyricsChor
   const plainText = useMemo(() => buildPlainText(sections), [sections]);
   const baseKey = originalKey || '—';
   const currentKey = originalKey ? getKeyLabel(originalKey, semitones) : '—';
+
+  const { containerRef, measureRef, maxChars } = useMonoCharsPerLine(fontScale);
 
   if (!lyricsChordpro?.trim()) {
     return (
@@ -155,9 +244,25 @@ export default function LyricsChords({ lyricsChordpro, originalKey }: LyricsChor
       </div>
 
       {/* Secciones de la canción */}
-      {/* min-w-0 evita que el contenido monoespaciado ancho (líneas de acordes)
-          fuerce el crecimiento de este contenedor en layouts flex/grid del padre. */}
-      <div style={{ fontSize: `${fontScale}rem` }} className="space-y-5 min-w-0">
+      {/* min-w-0 evita que el contenido monoespaciado ancho fuerce el crecimiento
+          de este contenedor en layouts flex/grid del padre. containerRef mide el
+          ancho disponible real para calcular cuántas columnas caben por línea. */}
+      <div
+        ref={containerRef}
+        style={{ fontSize: `${fontScale}rem` }}
+        className="space-y-5 min-w-0"
+      >
+        {/* Span invisible usado solo para medir el ancho de un carácter en la
+            fuente monoespaciada actual. No ocupa espacio visual ni afecta el layout. */}
+        <span
+          ref={measureRef}
+          aria-hidden="true"
+          className="font-mono whitespace-pre absolute opacity-0 pointer-events-none -z-10"
+          style={{ left: '-9999px', top: 0 }}
+        >
+          00000000000000000000
+        </span>
+
         {sections.map((section, sIdx) => {
           const isChorus = section.label?.startsWith('Coro') ?? false;
           return (
@@ -205,25 +310,27 @@ export default function LyricsChords({ lyricsChordpro, originalKey }: LyricsChor
 
                   // Modo "Con acordes": alineado por columnas como una tablatura de texto,
                   // usando espacios reales para que el acorde quede exacto sobre su sílaba.
-                  // Como esa fila de texto monoespaciado puede ser más ancha que la pantalla
-                  // en móvil, cada línea tiene su propio scroll horizontal independiente
-                  // (overflow-x-auto) en vez de desbordar el card o forzar scroll de toda la página.
+                  // Si la línea completa no entra en pantalla, se corta en fragmentos que
+                  // sí caben (siempre en un espacio entre palabras) y se apilan uno debajo
+                  // del otro, en vez de desbordar el card o requerir scroll horizontal.
                   const { chordRow, lyricRow } = renderTabLine(line, semitones);
+                  const chunks = wrapTabPair(chordRow, lyricRow, maxChars);
                   return (
-                    <div
-                      key={lIdx}
-                      className="font-mono leading-tight overflow-x-auto overflow-y-hidden -mx-1 px-1 [scrollbar-width:thin]"
-                    >
-                      {chordRow && (
-                        <div className="whitespace-pre text-blue-600 dark:text-amber-400 font-bold">
-                          {chordRow}
+                    <div key={lIdx} className="font-mono leading-tight">
+                      {chunks.map((chunk, cIdx) => (
+                        <div key={cIdx} className={cIdx > 0 ? 'mt-0.5' : undefined}>
+                          {chunk.chordRow && (
+                            <div className="whitespace-pre text-blue-600 dark:text-amber-400 font-bold">
+                              {chunk.chordRow}
+                            </div>
+                          )}
+                          {chunk.lyricRow && (
+                            <div className="whitespace-pre text-slate-800 dark:text-slate-100">
+                              {chunk.lyricRow}
+                            </div>
+                          )}
                         </div>
-                      )}
-                      {lyricRow && (
-                        <div className="whitespace-pre text-slate-800 dark:text-slate-100">
-                          {lyricRow}
-                        </div>
-                      )}
+                      ))}
                     </div>
                   );
                 })}
