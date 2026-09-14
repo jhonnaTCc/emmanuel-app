@@ -155,11 +155,13 @@ export default function LyricsChords({ lyricsChordpro, originalKey }: LyricsChor
       </div>
 
       {/* Secciones de la canción */}
-      <div style={{ fontSize: `${fontScale}rem` }} className="space-y-5">
+      {/* min-w-0 evita que el contenido monoespaciado ancho (líneas de acordes)
+          fuerce el crecimiento de este contenedor en layouts flex/grid del padre. */}
+      <div style={{ fontSize: `${fontScale}rem` }} className="space-y-5 min-w-0">
         {sections.map((section, sIdx) => {
           const isChorus = section.label?.startsWith('Coro') ?? false;
           return (
-            <div key={sIdx}>
+            <div key={sIdx} className="min-w-0">
               {section.label && (
                 <>
                   {/* Modo claro: etiqueta tipo "pill". Modo oscuro: estilo tablatura "[Etiqueta]" */}
@@ -180,8 +182,8 @@ export default function LyricsChords({ lyricsChordpro, originalKey }: LyricsChor
               <div
                 className={
                   isChorus && showChords
-                    ? 'space-y-1 border-l-2 border-blue-200 dark:border-amber-400/30 pl-3'
-                    : 'space-y-1'
+                    ? 'space-y-1 border-l-2 border-blue-200 dark:border-amber-400/30 pl-3 min-w-0'
+                    : 'space-y-1 min-w-0'
                 }
               >
                 {section.lines.map((line, lIdx) => {
@@ -203,9 +205,15 @@ export default function LyricsChords({ lyricsChordpro, originalKey }: LyricsChor
 
                   // Modo "Con acordes": alineado por columnas como una tablatura de texto,
                   // usando espacios reales para que el acorde quede exacto sobre su sílaba.
+                  // Como esa fila de texto monoespaciado puede ser más ancha que la pantalla
+                  // en móvil, cada línea tiene su propio scroll horizontal independiente
+                  // (overflow-x-auto) en vez de desbordar el card o forzar scroll de toda la página.
                   const { chordRow, lyricRow } = renderTabLine(line, semitones);
                   return (
-                    <div key={lIdx} className="font-mono leading-tight">
+                    <div
+                      key={lIdx}
+                      className="font-mono leading-tight overflow-x-auto overflow-y-hidden -mx-1 px-1 [scrollbar-width:thin]"
+                    >
                       {chordRow && (
                         <div className="whitespace-pre text-blue-600 dark:text-amber-400 font-bold">
                           {chordRow}
